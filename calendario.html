@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Calendario</h1>
+    <div>
+        <form action="/cambiar_fecha" method="POST">
+            <label for="fecha_cita">Fecha de Cita:</label>
+            <input type="date" id="fecha_cita" name="fecha_cita" required>
+            <button type="submit">Registrar Cita</button>
+        </form>
+    </div>
+
+    <div>
+        <h2>Calendario</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Lun</th>
+                    <th>Mar</th>
+                    <th>Mié</th>
+                    <th>Jue</th>
+                    <th>Vie</th>
+                    <th>Sáb</th>
+                    <th>Dom</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for week in calendar_data %}
+                    <tr>
+                        {% for day in week %}
+                            <td class="day {{ 'past-day' if day == 0 else '' }}" onclick="selectDay({{ day }})">
+                                {{ day if day != 0 else '' }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <h3>Seleccionada: <span id="selected_date"></span></h3>
+
+    <script>
+        function selectDay(day) {
+            const year = {{ year }};
+            const month = {{ month }};
+            const selectedDate = new Date(year, month - 1, day);
+            document.getElementById('selected_date').innerText = selectedDate.toLocaleDateString();
+        }
+    </script>
+</body>
+</html>
